@@ -6,19 +6,34 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
+      # 1. Code-ஐ எடுத்துக்கொள்ளுதல் (Updated to v4)
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action-1@v4
-        id: buildozer
+      # 2. Python செட் செய்தல்
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          command: buildozer android debug
-          buildozer_version: master
+          python-version: '3.10'
 
+      # 3. தேவையான மென்பொருள்களை நிறுவுதல் (Manual Install)
+      - name: Install Buildozer and Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libffi-dev libssl-dev libltdl-dev
+          pip install --upgrade pip
+          pip install buildozer cython==0.29.36
+
+      # 4. ஆப் பில்ட் செய்தல் (Build Command)
+      - name: Build APK
+        run: |
+          yes | buildozer android debug
+
+      # 5. ஆப்-ஐ அப்லோட் செய்தல் (Updated to v4 - இதுதான் முக்கிய மாற்றம்)
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: AI-Video-App
           path: bin/*.apk
