@@ -11,7 +11,7 @@ package.domain = org.test
 
 # (str) Source code where the main.py live
 source.dir = .
-
+version = 0.1
 # (str) Source filename (default: main.py)
 source.include_exts = py,png,jpg,kv,atlas
 
